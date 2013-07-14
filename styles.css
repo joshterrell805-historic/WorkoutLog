@@ -1,0 +1,55 @@
+.panel, 
+   .screen,
+   .list, 
+      .sessionDivisions,
+   .listElement,
+      .sessionDivisionsElement,
+   .table
+{
+   display: block;
+   width: 100%;
+   height: 100%;
+   background-color: #BBB;
+   position: relative;
+   padding: 0;
+   margin: 0;
+}
+
+.list, 
+   .sessionDivisions 
+{
+   width: 90%;
+   margin-left: auto;
+   margin-right: auto;
+}
+
+.screen {
+   position: fixed;
+   top: 0;
+   left: 0;
+   text-align: center;
+   background-color: #FFF;
+}
+
+.sessionDivisions {
+   height: 40%;
+   overflow-y: auto;
+}
+
+.sessionDivisionsElement {
+   text-align: left;
+}
+
+.table {
+   display: table;
+   height: auto;
+   background-color: #000;
+}
+
+.td {
+}
+
+.tr {
+   width: 100%;
+   background-color: #BBB;
+}
