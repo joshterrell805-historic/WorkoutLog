@@ -1,6 +1,6 @@
 <script type='text/javascript'> 
    // change this to load from the database. Just use sample code for now.
-   var division = new Exersize({
+   var division = new Exercise({
       name: 'Barbell Benchpress',
 
       sets: new DivisionSuite({

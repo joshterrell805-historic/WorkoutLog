@@ -4,9 +4,9 @@ var SessionTemplate = new Class({
    initialize: function(options) {
       this.parent(options);
 
-      // Exersize or DivisionSuite
+      // Exercise or DivisionSuite
       // if divisionSuite contains more divisionsuites (circuits), each
-      //  level 2 divisionsuite must have a title
+      //  level 2 divisionsuite must have a name
       this.division = Utils.returnMember(options, 'division', null);
 
       this.title = Utils.returnMember(options, 'title', 'Today\'s Workout');
@@ -53,7 +53,7 @@ var Set = new Class({
    }
 });
 
-var Exersize = new Class({
+var Exercise = new Class({
    Extends: Division,
 
    initialize: function(options) {

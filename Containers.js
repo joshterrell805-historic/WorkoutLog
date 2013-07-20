@@ -6,6 +6,8 @@ var Panel = new Class({
       this.panel = new Element('div', {
          class: Utils.returnMember(options, 'class', 'panel')
       });
+
+      $(this).handle = this;
    },
    toElement: function() {
       return $(this.panel);
@@ -103,15 +105,21 @@ var Table = new Class({
       var td = new Element('td', {class: 'td'});
       td.grab(element);
       tr.grab(td);
+      tr.element = element;
       $(this).grab(tr);
+   },
+   getRow: function(element) {
+      for (var i in this.rows) {
+         var row = this.rows[i];
+         if (element === row.element)
+            return row;
+      }
    },
    setRowHeight: function(heightInPixils) {
       Array.each(this.rows, function(row, index) {
          row.setStyle('height', heightInPixils);
       });
    }
-
-
 });
 
 var List = new Class({
@@ -141,6 +149,9 @@ var List = new Class({
       this.table.setRowHeight(rowHeightPx);
       $(this.table).setStyle('font-size', 
        (rowHeightPx * this.textPercent) + 'px');
+   },
+   getRow: function(element) {
+      return this.table.getRow(element);
    }
 });
 
@@ -155,10 +166,18 @@ var SessionDivisions = new Class({
    addElement: function(options) {
       var element = new SessionDivisionsElement(options);
       this._addElement(element);
+
+      this.getRow(element).addEvent(
+       SCREEN_EVENT.LIST_ELEMENT_ACTION,
+       ScreenManager.handleEvent.pass({
+        type: SCREEN_EVENT.LIST_ELEMENT_ACTION, 
+        element: $(element)
+       })
+      );
    },
    setDivision: function(division) {
-      if (instanceOf(division, Exersize)) {
-         this.addElement(division);
+      if (instanceOf(division, Exercise)) {
+         this.addElement({division: division});
       } else if (instanceOf(division, DivisionSuite)) {
 
       } else
@@ -180,7 +199,6 @@ var SessionDivisionsElement = new Class({
    initialize: function(options) {
       options['class'] = 'sessionDivisionsElement';
       this.parent(options);
-      $(this).set('text', options.name);
+      $(this).set('text', options.division.name);
    }
 });
-

@@ -1,6 +1,6 @@
 var SessionManager = new Class({
-   load: function(options) {
-      ScreenManager.display(SCREEN.SESSION, options);
+   startExercise: function(exercise) {
+      ScreenManager.display(SCREEN.EXERCISE, {exercise: exercise});
    }
 });
 
@@ -11,6 +11,16 @@ SessionManager.getSingleton = function() {
 };
 
 SessionManager.load = function(options) {
-   var singleton = SessionManager.getSingleton();
-   singleton.load(options);
+   ScreenManager.display(SCREEN.SESSION, options);
+};
+
+SessionManager.openDivision = function(division) {
+   if (instanceOf(division, Exercise)) {
+      SessionManager.getSingleton().startExercise(division);
+   } else if (instanceOf(division, DivisionSuite)) {
+
+   } else
+      // this should never happen unless I fucked up which is why I'm just
+      //  throwing an error.
+      throw new Error('Invalid division');
 };

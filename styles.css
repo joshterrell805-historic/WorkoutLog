@@ -38,6 +38,11 @@
 
 .sessionDivisionsElement {
    text-align: left;
+   background-color: transparent;
+}
+
+.sessionDivisionsInnerElement {
+   padding: 0px 3%;
 }
 
 .table {
@@ -47,6 +52,8 @@
 }
 
 .td {
+   background-color: #DDB;
+   padding: 0 1.5%;
 }
 
 .tr {
