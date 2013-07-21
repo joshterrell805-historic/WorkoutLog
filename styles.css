@@ -4,7 +4,9 @@
       .sessionDivisions,
    .listElement,
       .sessionDivisionsElement,
-   .table
+   .table,
+   .button,
+   .innerButton
 {
    display: block;
    width: 100%;
@@ -59,4 +61,34 @@
 .tr {
    width: 100%;
    background-color: #BBB;
+}
+
+.button {
+   width: auto;
+   display: inline-block;
+   background-color: #000;
+}
+
+.innerButton {
+   vertical-align: middle;
+}
+
+.noSelect,
+   .innerButton,
+   .table
+{
+   -webkit-touch-callout: none;
+   -webkit-user-select: none;
+   -khtml-user-select: none;
+   -moz-user-select: moz-none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
+.clickable,
+   .innerButton,
+   .listElement,
+      .sessionDivisionsElement
+{
+   cursor: pointer;
 }

@@ -53,6 +53,18 @@ var Set = new Class({
    }
 });
 
+var Sets = new Class({
+   Extends: DivisionSuite,
+
+   initialize: function(options) {
+      this.parent(options);
+      // essentially sets takes the place of divisions, but create a new class
+      //  just incase anything different ends up being done, or at least for
+      //  abstraction's sake.
+      this.sets = Utils.returnMember(options, 'sets', null);
+   }
+});
+
 var Exercise = new Class({
    Extends: Division,
 

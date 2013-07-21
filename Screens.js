@@ -23,6 +23,8 @@ ScreenManager.getSingleton = function() {
 };
 
 ScreenManager.display = function(screenType, options) {
+   Resizer.clear();
+   ButtonManager.clear();
    var self = ScreenManager.getSingleton();
    var screen = null;
 
@@ -38,6 +40,7 @@ ScreenManager.display = function(screenType, options) {
    }
 
    self.setScreen(screen);
+   Resizer.resize();
 };
 
 ScreenManager.handleEvent = function(typeAndElement) {
@@ -46,6 +49,10 @@ ScreenManager.handleEvent = function(typeAndElement) {
 
    var self = ScreenManager.getSingleton();
    self.currentScreen.handleEvent(type, element);
+};
+
+ScreenManager.getScreenSize = function() {
+   return $(ScreenManager.getSingleton().currentScreen).getSize();
 };
 
 var Screen = new Class({
@@ -65,7 +72,8 @@ SCREEN.SESSION = 0;
 SCREEN.EXERCISE = 1;
 
 SCREEN_EVENT = {};
-SCREEN_EVENT.LIST_ELEMENT_ACTION = 'dblclick';
+SCREEN_EVENT.LIST_ELEMENT_ACTION = 'click';
+SCREEN_EVENT.CLICK = 'click';
 
 var SessionScreen = new Class({
    Extends: Screen,
@@ -81,11 +89,11 @@ var SessionScreen = new Class({
                case 'sessionDivisionsElement':
                   SessionManager.openDivision(
                    element.handle.options.division);
-               break;
+                  break;
                default:
                   this.unhandledEvent(type, element);
             }
-         break;
+            break;
          default:
             this.unhandledEvent(type, element);
       }
@@ -96,8 +104,127 @@ var ExerciseScreen = new Class({
    Extends: Screen,
    initialize: function(options) {
       this.parent(options);
-
+      Resizer.addCallback(ButtonManager.resize);
+      this.button = new Button({onClick: function(){console.log('hi');}});
+      this.button2 = new Button({text: 'Shit yooo'});
+      this.button3 = new Button({text: 'ya'});
+      $(this).grab($(this.button));
+      $(this).grab($(this.button2));
+      $(this).grab($(this.button3));
+      ButtonManager.addWidthGroup([this.button, this.button2]);
+   },
+   handleEvent: function(type, element) {
+      switch (type) {
+         case SCREEN_EVENT.CLICK:
+            element.handle.options.onClick();
+            break;
+         default:
+            this.unhandledEvent(type, element);
+      }
    }
 });
 
+// keep all buttons uniform height-wise on page
+//  optionally, make buttons uniform in width if they are in a group
+//  (take largest width)
+var ButtonManager = new Class({
+   initialize: function() {
+      this.styles = {
+         // button outerHeight with respect to screen size
+         buttonHeight: 0.06,
+         // button border thickness with respect to buttonHeight
+         buttonBorder: 0.05,
+         // with respect to button innerHeight. Remainder goes to spacing.
+         fontHeight: 0.8,
+      };
+
+      this.clear();
+   },
+   clear: function() {
+      this.buttons = [];
+      this.widthGroups = [];
+   }
+
+});
+
+ButtonManager.getSingleton = function() {
+   if (typeof ButtonManager.___SINGLETON___ === 'undefined')
+      ButtonManager.___SINGLETON___ = new ButtonManager();
+   return ButtonManager.___SINGLETON___;
+};
+
+ButtonManager.addButton = function(button) {
+   ButtonManager.getSingleton().buttons.push(button);
+};
+
+ButtonManager.addWidthGroup = function(buttonArray) {
+   var self = ButtonManager.getSingleton();
+   self.widthGroups.push(buttonArray);
+   var index = self.widthGroups.length - 1;
+   Array.each(buttonArray, function(button, index) {
+      button.__widthGroup__ = index;
+   });
+};
+
+ButtonManager.isInWidthGroup = function(button) {
+   return button.__widthGroup__ !== undefined;
+};
+
+ButtonManager.resize = function() {
+
+   var self = ButtonManager.getSingleton();
+   var screenSize = ScreenManager.getScreenSize();
+
+   var buttonHeight = screenSize.y * self.styles.buttonHeight;
+   var borderThickness = buttonHeight * self.styles.buttonBorder;
+   var innerHeight = buttonHeight - 2 * borderThickness;
+   var fontHeight = innerHeight * self.styles.fontHeight;
+   var innerPadding = (innerHeight - fontHeight) / 2;
+   options = {
+      buttonHeight: buttonHeight,
+      borderThickness: borderThickness,
+      innerHeight: innerHeight,
+      fontHeight: fontHeight,
+      innerPadding: innerPadding
+   };
+
+   ButtonManager.setStyles(self.buttons, options);
+
+   Array.each(self.widthGroups, function(widthGroup, index) {
+      var largestWidth = 0;
+
+      for (var i = 0; i < widthGroup.length; i++) {
+         var buttonWidth = $(widthGroup[i]).getSize().x;
+         largestWidth = buttonWidth > largestWidth ? buttonWidth : largestWidth;
+      }
+
+      ButtonManager.setWidths(widthGroup, largestWidth);
+   });
+};
+
+ButtonManager.setWidths = function(buttons, width) {
+   width = width + 'px';
+
+   for (var i = 0; i < buttons.length; i++)
+      $(buttons[i]).setStyle('width', width);
+}
+
+ButtonManager.setStyles = function(buttons, styles) {
+   for (var i = 0; i < buttons.length; i++) {
+      var button = buttons[i];
+      $(button).setStyle('width', null);
+      $(button.innerDiv).setStyle('font-size', options['fontHeight'] + 'px');
+      $(button.innerDiv).setStyle('line-height', options['innerHeight'] + 'px');
+      var innerSize = $(button.innerDiv).getSize();
+      $(button).setStyle('height', options['buttonHeight']);
+      $(button).setStyle('padding', options['borderThickness'] + 'px');
+      $(button).setStyle('width', (innerSize.x + 
+       (options['innerPadding'] + options['borderThickness']) * 2) + 'px'
+      );
+   }
+}
+
+ButtonManager.clear = function() {
+   ButtonManager.getSingleton().clear();
+};
 

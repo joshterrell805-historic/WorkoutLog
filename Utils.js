@@ -45,7 +45,7 @@ Resizer.addCallback = function(callback) {
    self.resizeCallbacks.push(callback);
 }
 Resizer.clear = function(){
+   var self = Resizer.getSingleton();
    self.resizeCallbacks = [];
 }
 window.onresize = Resizer.resize;
-window.onload = window.onresize;

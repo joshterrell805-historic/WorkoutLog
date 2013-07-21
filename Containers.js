@@ -109,7 +109,7 @@ var Table = new Class({
       $(this).grab(tr);
    },
    getRow: function(element) {
-      for (var i in this.rows) {
+      for (var i = 0; i < this.rows.length; i++) {
          var row = this.rows[i];
          if (element === row.element)
             return row;
@@ -200,5 +200,39 @@ var SessionDivisionsElement = new Class({
       options['class'] = 'sessionDivisionsElement';
       this.parent(options);
       $(this).set('text', options.division.name);
+   }
+});
+
+var ClickablePanel = new Class({
+   Extends: Panel,
+   // set options.onClick to the method to be called on click
+   initialize: function(options) {
+      this.parent(options);
+
+      $(this).addEvent(
+       SCREEN_EVENT.CLICK,
+       ScreenManager.handleEvent.pass({
+        type: SCREEN_EVENT.CLICK,
+        element: $(this)
+       })
+      );
+   }
+});
+
+var Button = new Class({
+   Extends: ClickablePanel,
+   initialize: function(options) {
+      options['class'] = Utils.returnMember(options, 'class', 'button');
+      this.parent(options);
+
+      this.innerDiv = new Panel(
+       Utils.returnMember(options, 'innnerOptions', {class: 'innerButton'}));
+      $(this).grab(this.innerDiv);
+
+      this.setText(Utils.returnMember(options, 'text', 'Button'));
+      ButtonManager.addButton(this);
+   },
+   setText: function(text) {
+      $(this.innerDiv).set('text', text);
    }
 });

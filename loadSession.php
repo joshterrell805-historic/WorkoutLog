@@ -3,8 +3,8 @@
    var division = new Exercise({
       name: 'Barbell Benchpress',
 
-      sets: new DivisionSuite({
-         divisions: [
+      sets: new Sets({
+         sets: [
             new Set({
                targetData: [
                   new TargetString({message: 'Warmup'}),
