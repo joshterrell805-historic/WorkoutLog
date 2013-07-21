@@ -6,7 +6,8 @@
       .sessionDivisionsElement,
    .table,
    .button,
-   .innerButton
+   .innerButton,
+   .exerciseTitle
 {
    display: block;
    width: 100%;
@@ -91,4 +92,12 @@
       .sessionDivisionsElement
 {
    cursor: pointer;
+}
+
+.exerciseTitle {
+   height: 7%;
+   text-overflow: ellipsis;
+   overflow: hidden;
+   white-space: nowrap;
+   background-color: transparent;
 }

@@ -236,3 +236,19 @@ var Button = new Class({
       $(this.innerDiv).set('text', text);
    }
 });
+
+var ExerciseTitle = new Class({
+   Extends: Panel,
+   initialize: function(options) {
+      options['class'] = 'exerciseTitle';
+      this.parent(options);
+      this.setText(Utils.returnMember(options, 'text', 'Exercise Title'));
+   },
+   setText: function(text) {
+      $(this).set('text', text);
+   }
+});
+
+var DropDownMenu = new Class({
+
+});

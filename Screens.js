@@ -60,10 +60,18 @@ var Screen = new Class({
    initialize: function(options) {
       options['class'] = 'screen';
       this.parent(options);
+      Resizer.addCallback(function() {
+         var size = ScreenManager.getScreenSize();
+         this.resize(size.x, size.y);
+      }.bind(this));
    },
    unhandledEvent: function(type, element) {
       throw new Error(
        'Event type=\'' + type +'\' fired in Screen was unhandled');
+   },
+   resize: function(width, height) {
+      // the screen width and height
+      // override in subclasses
    }
 });
 
@@ -105,13 +113,10 @@ var ExerciseScreen = new Class({
    initialize: function(options) {
       this.parent(options);
       Resizer.addCallback(ButtonManager.resize);
-      this.button = new Button({onClick: function(){console.log('hi');}});
-      this.button2 = new Button({text: 'Shit yooo'});
-      this.button3 = new Button({text: 'ya'});
-      $(this).grab($(this.button));
-      $(this).grab($(this.button2));
-      $(this).grab($(this.button3));
-      ButtonManager.addWidthGroup([this.button, this.button2]);
+      this.addChildren(options);
+      this.styles = {
+         title: 0.6
+      };
    },
    handleEvent: function(type, element) {
       switch (type) {
@@ -121,6 +126,25 @@ var ExerciseScreen = new Class({
          default:
             this.unhandledEvent(type, element);
       }
+   },
+   resize: function(width, height) {
+      var titleHeight = $(this.title).getSize().y;
+      var fontHeight = titleHeight * this.styles.title;
+      $(this.title).setStyle('font-size', fontHeight + 'px');
+      $(this.title).setStyle('line-height', titleHeight + 'px');
+
+
+   },
+   addChildren: function(options) {
+      this.title = new ExerciseTitle({text: options.exercise.name});
+      this.button = new Button({onClick: function(){console.log('hi');}});
+      this.button2 = new Button({text: 'Shit yooo'});
+      this.button3 = new Button({text: 'ya'});
+      $(this).grab($(this.title));
+      $(this).grab($(this.button));
+      $(this).grab($(this.button2));
+      $(this).grab($(this.button3));
+      ButtonManager.addWidthGroup([this.button, this.button2]);
    }
 });
 
@@ -131,7 +155,7 @@ var ButtonManager = new Class({
    initialize: function() {
       this.styles = {
          // button outerHeight with respect to screen size
-         buttonHeight: 0.06,
+         buttonHeight: 0.05,
          // button border thickness with respect to buttonHeight
          buttonBorder: 0.05,
          // with respect to button innerHeight. Remainder goes to spacing.
