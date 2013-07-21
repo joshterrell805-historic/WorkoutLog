@@ -11,7 +11,9 @@ SessionManager.getSingleton = function() {
 };
 
 SessionManager.load = function(options) {
-   ScreenManager.display(SCREEN.SESSION, options);
+   //ScreenManager.display(SCREEN.SESSION, options);
+   // for testing purposes: just jump strait to Exercise screen
+   ScreenManager.display(SCREEN.EXERCISE, {exercise: options.division});
 };
 
 SessionManager.openDivision = function(division) {

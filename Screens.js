@@ -55,6 +55,10 @@ ScreenManager.getScreenSize = function() {
    return $(ScreenManager.getSingleton().currentScreen).getSize();
 };
 
+ScreenManager.grab = function(element) {
+   ScreenManager.getSingleton().body.grab($(element));
+};
+
 var Screen = new Class({
    Extends: Panel,
    initialize: function(options) {
@@ -80,8 +84,8 @@ SCREEN.SESSION = 0;
 SCREEN.EXERCISE = 1;
 
 SCREEN_EVENT = {};
-SCREEN_EVENT.LIST_ELEMENT_ACTION = 'click';
-SCREEN_EVENT.CLICK = 'click';
+SCREEN_EVENT.LIST_ELEMENT_ACTION = {id: 0, action: 'click'};
+SCREEN_EVENT.CLICK = {id: 1, action: 'click'};
 
 var SessionScreen = new Class({
    Extends: Screen,
@@ -113,13 +117,24 @@ var ExerciseScreen = new Class({
    initialize: function(options) {
       this.parent(options);
       Resizer.addCallback(ButtonManager.resize);
-      this.addChildren(options);
-      this.styles = {
-         title: 0.6
-      };
+
+      this.exercise = options.exercise;
+      if (this.exercise === undefined)
+         throw Error('Undefined Exercise');
+
+      this.addChildren();
    },
    handleEvent: function(type, element) {
       switch (type) {
+         case SCREEN_EVENT.LIST_ELEMENT_ACTION:
+            switch (element.handle.options.class) {
+               case 'dropDownElement':
+                  this.setRecords.dropDownMenu.clickUnfoldedElement(element);
+                  break;
+               default:
+                  this.unhandledEvent(type, element);
+            }
+            break;
          case SCREEN_EVENT.CLICK:
             element.handle.options.onClick();
             break;
@@ -128,19 +143,17 @@ var ExerciseScreen = new Class({
       }
    },
    resize: function(width, height) {
-      var titleHeight = $(this.title).getSize().y;
-      var fontHeight = titleHeight * this.styles.title;
-      $(this.title).setStyle('font-size', fontHeight + 'px');
-      $(this.title).setStyle('line-height', titleHeight + 'px');
-
-
+      this.title.resize(width, height);
+      this.setRecords.resize(width, height);
    },
    addChildren: function(options) {
-      this.title = new ExerciseTitle({text: options.exercise.name});
+      this.title = new ExerciseTitle({text: this.exercise.name});
+      this.setRecords = new SetRecords({exercise: this.exercise});
+      $(this).grab($(this.title));
+      $(this).grab($(this.setRecords));
       this.button = new Button({onClick: function(){console.log('hi');}});
       this.button2 = new Button({text: 'Shit yooo'});
       this.button3 = new Button({text: 'ya'});
-      $(this).grab($(this.title));
       $(this).grab($(this.button));
       $(this).grab($(this.button2));
       $(this).grab($(this.button3));
@@ -148,7 +161,7 @@ var ExerciseScreen = new Class({
    }
 });
 
-// keep all buttons uniform height-wise on page
+// keep all buttons uniform height-wise and border wise on page
 //  optionally, make buttons uniform in width if they are in a group
 //  (take largest width)
 var ButtonManager = new Class({
@@ -156,10 +169,8 @@ var ButtonManager = new Class({
       this.styles = {
          // button outerHeight with respect to screen size
          buttonHeight: 0.05,
-         // button border thickness with respect to buttonHeight
-         buttonBorder: 0.05,
          // with respect to button innerHeight. Remainder goes to spacing.
-         fontHeight: 0.8,
+         fontHeight: 0.6,
       };
 
       this.clear();
@@ -197,19 +208,27 @@ ButtonManager.isInWidthGroup = function(button) {
 ButtonManager.resize = function() {
 
    var self = ButtonManager.getSingleton();
+   if (self.buttons.length === 0)
+      return;
+
    var screenSize = ScreenManager.getScreenSize();
 
    var buttonHeight = screenSize.y * self.styles.buttonHeight;
-   var borderThickness = buttonHeight * self.styles.buttonBorder;
-   var innerHeight = buttonHeight - 2 * borderThickness;
+   Array.each(self.buttons, function(button, index) {
+      button.resize(undefined, buttonHeight);
+   });
+   // assert (at least for now) that all buttons in the button manager
+   // have the same border-size settings
+   
+   var borderWidth = $(self.buttons[0]).getStyle('border-width').toInt();
+   var innerHeight = $(self.buttons[0]).getSize().y - borderWidth * 2;
    var fontHeight = innerHeight * self.styles.fontHeight;
    var innerPadding = (innerHeight - fontHeight) / 2;
    options = {
-      buttonHeight: buttonHeight,
-      borderThickness: borderThickness,
       innerHeight: innerHeight,
       fontHeight: fontHeight,
-      innerPadding: innerPadding
+      innerPadding: innerPadding,
+      borderWidth: borderWidth
    };
 
    ButtonManager.setStyles(self.buttons, options);
@@ -221,6 +240,8 @@ ButtonManager.resize = function() {
          var buttonWidth = $(widthGroup[i]).getSize().x;
          largestWidth = buttonWidth > largestWidth ? buttonWidth : largestWidth;
       }
+
+      largestWidth -= 2 * $(widthGroup[0]).getStyle('borderWidth').toInt();
 
       ButtonManager.setWidths(widthGroup, largestWidth);
    });
@@ -240,11 +261,7 @@ ButtonManager.setStyles = function(buttons, styles) {
       $(button.innerDiv).setStyle('font-size', options['fontHeight'] + 'px');
       $(button.innerDiv).setStyle('line-height', options['innerHeight'] + 'px');
       var innerSize = $(button.innerDiv).getSize();
-      $(button).setStyle('height', options['buttonHeight']);
-      $(button).setStyle('padding', options['borderThickness'] + 'px');
-      $(button).setStyle('width', (innerSize.x + 
-       (options['innerPadding'] + options['borderThickness']) * 2) + 'px'
-      );
+      $(button).setStyle('width', (innerSize.x + 2 * options['innerPadding']) + 'px');
    }
 }
 

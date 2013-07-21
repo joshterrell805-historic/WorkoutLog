@@ -7,7 +7,16 @@
    .table,
    .button,
    .innerButton,
-   .exerciseTitle
+   .exerciseTitle,
+   .setRecords,
+   .dropDownMenu_folded,
+      .dropDownMenu_inner,
+         .dropDown_innerArrow,
+         .dropDown_innerText,
+   .dropDownMenu_unfolded,
+      .dropDownElement,
+   .borderedPanel,
+      .buttonBorder
 {
    display: block;
    width: 100%;
@@ -18,9 +27,24 @@
    margin: 0;
 }
 
-.list, 
-   .sessionDivisions 
+.borderedPanel,
+   .buttonBorder,
+   .dropDownMenu_folded
 {
+   border-style: solid;
+
+   /* 
+    * don't override border-width in css 
+    * border-width property set in class BorderedPanel 
+    */
+   border-width: 0px;
+}
+
+.list, 
+   .sessionDivisions, 
+   .dropDownMenu_unfolded
+{
+   overflow-y: auto;
    width: 90%;
    margin-left: auto;
    margin-right: auto;
@@ -34,12 +58,21 @@
    background-color: #FFF;
 }
 
+.buttonBorder {
+   display: inline-block;
+   width: auto;
+   border-style: outset;
+   border-color: #BA7;
+}
+
 .sessionDivisions {
    height: 40%;
    overflow-y: auto;
 }
 
-.sessionDivisionsElement {
+.sessionDivisionsElement,
+.dropDownElement
+{
    text-align: left;
    background-color: transparent;
 }
@@ -54,10 +87,13 @@
    background-color: #000;
 }
 
-.td {
+.td, 
+   .dropDownMenu_td
+{
    background-color: #DDB;
    padding: 0 1.5%;
 }
+
 
 .tr {
    width: 100%;
@@ -76,7 +112,8 @@
 
 .noSelect,
    .innerButton,
-   .table
+   .table,
+   .dropDownMenu_inner
 {
    -webkit-touch-callout: none;
    -webkit-user-select: none;
@@ -89,15 +126,64 @@
 .clickable,
    .innerButton,
    .listElement,
-      .sessionDivisionsElement
+      .sessionDivisionsElement,
+   .dropDownMenu_inner,
+   .dropDownElement
 {
    cursor: pointer;
 }
 
+/* ExersizeScreen */
 .exerciseTitle {
    height: 7%;
+   background-color: transparent;
+}
+
+.textNoOverflow,
+   .exerciseTitle,
+   .dropDown_innerText
+{
    text-overflow: ellipsis;
    overflow: hidden;
    white-space: nowrap;
+}
+
+.setRecords {
+   height: 30%;
+   width: 92%;
+   margin: 1.5% 3%;
+   background-color: #EEE;
+   padding: 1%;
+}
+.dropDownMenu_folded {
+   height: 18%;
+   border-style: inset;
+   border-color: #57C;
+   background-color: #FFF;
+}
+.dropDownMenu_unfolded {
+   background-color: #FFF;
+   position: fixed;
+}
+.dropDownMenu_inner {
    background-color: transparent;
+}
+
+.dropDown_innerArrow,
+.dropDown_innerText
+{
+   display: inline-block;
+   background-color: transparent;
+   width: auto;
+}
+.dropDown_innerArrow {
+   float: right;
+}
+.dropDown_innerText {
+   float: left;
+   text-align: left;
+}
+.dropDownMenu_td {
+   background-color: #FFF;
+   padding: 0 1%;
 }
