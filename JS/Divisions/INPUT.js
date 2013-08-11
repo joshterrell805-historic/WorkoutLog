@@ -1,0 +1,3 @@
+var INPUT = {};
+INPUT.BARBELL = 0;
+INPUT.DIGIT = 1;
