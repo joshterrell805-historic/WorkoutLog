@@ -6,28 +6,55 @@ var DropDownMenu = new Class({
        'dropDownMenu_folded');
        options['borderSize'] = 0.06;
       this.parent(options);
-
-      this.items = options.items;
+      this.disabled = false;
       
       this.styles.fontHeight = 0.7;
       this.styles.arrowHeight = 0.6;
       this.styles.paddingOutside = 0.01;
       this.styles.paddingInside = 0.05;
 
-      this.innerDiv = new ClickablePanel({
-       class: Utils.returnMember(options, 'innerClass', 'dropDownMenu_inner'),
-       onClick: this.clickUnfolded.bind(this)
+      this.innerDivEnabled = this.innerDiv = new ClickablePanel({
+          class: Utils.returnMember(options, 'innerClass', 'dropDownMenu_inner'),
+          onClick: this.clickUnfolded.bind(this)
+      });
+      this.innerDivDisabled = this.innerDiv = new Panel({
+          class: Utils.returnMember(options, 'innerClassDisabled',
+           'dropDownMenu_inner_disabled'),
       });
 
-      $(this).grab($(this.innerDiv));
-
       this.arrowDiv = new Panel({class: 'dropDown_innerArrow'});
-      this.setArrow('up');
-
       this.textDiv = new Panel({class: 'dropDown_innerText'});
 
+   },
+
+   setItems: function(items) {
+      this.items = items == null ? [] : items;
+
+      if (this.disabled ^ (this.items.length == 0)) {
+         if(this.disabled) {
+            this.disabled = false;
+            $(this).removeClass('disabled');
+         }
+         else {
+            this.disabled = true;
+            $(this).addClass('disabled');
+         }
+      }
+
+      if (this.unfolded)
+         this.clickUnfolded();
+
+      if (this.innerDiv)
+         $(this.innerDiv).dispose();
+
+      this.innerDiv = this.disabled ? this.innerDivDisabled :
+       this.innerDivEnabled;
+
+      $(this).grab($(this.innerDiv));
       $(this.innerDiv).grab($(this.textDiv));
       $(this.innerDiv).grab($(this.arrowDiv));
+      console.log(this.innerDiv);
+      this.setArrow('up');
    },
 
    setText: function(text) {

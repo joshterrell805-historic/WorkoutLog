@@ -3,7 +3,6 @@ var ExerciseScreen = new Class({
 
    initialize: function(options) {
       this.parent(options);
-      Resizer.addCallback(ButtonManager.resize);
 
       this.exercise = options.exercise;
       if (this.exercise === undefined)
@@ -32,15 +31,20 @@ var ExerciseScreen = new Class({
    },
 
    resize: function(width, height) {
-      this.title.resize(width, height);
+      this.labelTitle.resize(width, height);
       this.setRecords.resize(width, height);
    },
 
    addChildren: function(options) {
-      this.title = new ExerciseTitle({text: this.exercise.name});
+      this.labelTitle = new Label({
+         class: 'exerciseTitle',
+         text: this.exercise.name,
+         fontPercent: 0.6
+      });
+
       this.setRecords = new SetRecords({exercise: this.exercise});
 
-      $(this).grab($(this.title));
+      $(this).grab($(this.labelTitle));
       $(this).grab($(this.setRecords));
 
       // TESTING

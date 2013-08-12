@@ -2,20 +2,26 @@
    .screen,
    .list, 
       .sessionDivisions,
+      .dropDownMenu_unfolded,
    .listElement,
       .sessionDivisionsElement,
+      .dropDownElement,
    .table,
    .button,
    .innerButton,
-   .exerciseTitle,
+   .Label,
+      .exerciseTitle,
+      .setRecords_Label,
+      .setRecords_BoxLabel,
    .setRecords,
-   .dropDownMenu_folded,
-      .dropDownMenu_inner,
-         .dropDown_innerArrow,
-         .dropDown_innerText,
-   .dropDownMenu_unfolded,
-      .dropDownElement,
+   .setRecords_recordContainer,
+   .setRecords_Div,
+   .dropDownMenu_inner, .dropDownMenu_inner_disabled,
+   .dropDown_innerArrow,
+   .dropDown_innerText,
    .borderedPanel,
+      .setRecords_currentBox, .setRecords_previousBox,
+      .dropDownMenu_folded,
       .buttonBorder
 {
    display: block;
@@ -25,10 +31,18 @@
    position: relative;
    padding: 0;
    margin: 0;
+   -webkit-touch-callout: none;
+   -webkit-user-select: none;
+   -khtml-user-select: none;
+   -moz-user-select: moz-none;
+   -ms-user-select: none;
+   user-select: none;
+   cursor: default;
 }
 
 .borderedPanel,
    .buttonBorder,
+   .setRecords_currentBox, .setRecords_previousBox,
    .dropDownMenu_folded
 {
    border-style: solid;
@@ -110,37 +124,28 @@
    vertical-align: middle;
 }
 
-.noSelect,
-   .innerButton,
-   .table,
-   .dropDownMenu_inner
-{
-   -webkit-touch-callout: none;
-   -webkit-user-select: none;
-   -khtml-user-select: none;
-   -moz-user-select: moz-none;
-   -ms-user-select: none;
-   user-select: none;
-}
-
 .clickable,
    .innerButton,
    .listElement,
       .sessionDivisionsElement,
    .dropDownMenu_inner,
+   .dropDown_innerArrow,
+   .dropDown_innerText,
    .dropDownElement
 {
    cursor: pointer;
 }
 
-/* ExersizeScreen */
+/* ExerciseScreen */
 .exerciseTitle {
    height: 7%;
    background-color: transparent;
 }
 
 .textNoOverflow,
-   .exerciseTitle,
+   .Label,
+      .exerciseTitle,
+      .setRecords_Label,
    .dropDown_innerText
 {
    text-overflow: ellipsis;
@@ -155,6 +160,38 @@
    background-color: #EEE;
    padding: 1%;
 }
+
+.setRecords_recordContainer {
+   height: 30%;
+   margin-top: 5%;
+   background-color: transparent;
+}
+
+.setRecords_Div {
+   width: 40%;
+   height: 100%;
+   margin: 0 5%;
+   display: inline-block;
+   background-color: transparent;
+   vertical-align: top;
+}
+
+.setRecords_Label {
+   height: 38%;
+   margin-bottom: 2%;
+   background-color: transparent;
+}
+
+.setRecords_currentBox, .setRecords_previousBox {
+   height: 60%;
+   background-color: #CCC;
+}
+.setRecords_BoxLabel {
+   background-color: transparent;
+   display: inline-block;
+   vertical-align: top;
+}
+
 .dropDownMenu_folded {
    height: 18%;
    border-style: inset;
@@ -165,7 +202,9 @@
    background-color: #FFF;
    position: fixed;
 }
-.dropDownMenu_inner {
+.dropDownMenu_inner,
+.dropDownMenu_inner_disabled
+{
    background-color: transparent;
 }
 
@@ -186,4 +225,8 @@
 .dropDownMenu_td {
    background-color: #FFF;
    padding: 0 1%;
+}
+.disabled {
+   background-color: #555;
+   opacity: 0.2;
 }

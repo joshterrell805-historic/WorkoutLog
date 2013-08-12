@@ -4,54 +4,85 @@
       name: 'Barbell Benchpress',
 
       sets: new Sets({
-         sets: [
+         divisions: [
             new Set({
-               targetData: [
-                  new TargetString({message: 'Warmup'}),
-
-                  new TargetRange({
-                     name: 'reps',
-                     low: 12,
-                     high: 16
-                  })
-               ],
-               lastData: [
-
-               ],
-            }),
-            new Set({
-               targetData: [
-                  new TargetRange({
-                     name: 'reps',
-                     low: 10,
-                     high: 12 
-                  })
-               ],
-               lastData: [
-
-               ],
-            }),
-            new Set({
-               targetData: [
-                  new TargetString({message: 'To failure'}),
-
-                  new TargetRange({
-                     name: 'reps',
-                     low: 6,
-                     high: 8
-                  })
-               ],
-               lastData: [
+               fields: [
                   new RecordField({
-                     name: 'reps',
-                     value: 9
+                     name: 'Reps',
+                     inputType: INPUT.DIGIT,
+                     lastValue: 16,
+                     target: [
+                        new TargetString({message: 'Warmup'}),
+                        new TargetRange({
+                           name: 'reps',
+                           low: 12,
+                           high: 16
+                        })
+                     ]
                   }),
                   new RecordField({
-                     name: 'weight',
-                     value: 205
+                     name: 'Weight',
+                     lastValue: 135,
+                     inputType: INPUT.BARBELL,
+                     system: SYSTEM.US
+                  }),
+                  new RecordField({
+                     name: 'Duration',
+                     lastValue: 26.2,
+                     inputType: INPUT.DURATION
                   })
+               ]
+            }),
 
-               ],
+            new Set({
+               fields: [
+                  new RecordField({
+                     name: 'Reps',
+                     inputType: INPUT.DIGIT,
+                     target: [
+                        new TargetRange({
+                           low: 10,
+                           high: 12
+                        })
+                     ]
+                  }),
+                  new RecordField({
+                     name: 'Weight',
+                     inputType: INPUT.BARBELL,
+                     system: SYSTEM.US
+                  }),
+                  new RecordField({
+                     name: 'Duration',
+                     inputType: INPUT.DURATION
+                  })
+               ]
+            }),
+
+            new Set({
+               fields: [
+                  new RecordField({
+                     name: 'Reps',
+                     lastValue: 9,
+                     inputType: INPUT.DIGIT,
+                     target: [
+                        new TargetString({message: 'To Failure'}),
+                        new TargetRange({
+                           low: 6,
+                           high: 8
+                        })
+                     ]
+                  }),
+                  new RecordField({
+                     name: 'Weight',
+                     lastValue: 205,
+                     inputType: INPUT.BARBELL,
+                     system: SYSTEM.US
+                  }),
+                  new RecordField({
+                     name: 'Duration',
+                     inputType: INPUT.DURATION
+                  })
+               ]
             })
          ],
 
@@ -60,18 +91,6 @@
             75
          ]
       }),
-
-      inputFields: [
-         new RecordInputField({
-            name: 'weight',
-            inputType: INPUT.BARBELL
-         }),
-         new RecordInputField({
-            name: 'reps',
-            inputType: INPUT.DIGIT
-         }),
-      ]
-
    });
 
    var sessionTemplate = new SessionTemplate({division: division});

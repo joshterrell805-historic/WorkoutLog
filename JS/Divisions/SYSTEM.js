@@ -1,0 +1,3 @@
+var SYSTEM = {};
+SYSTEM.US = 1;
+SYSTEM.METRIC = 2;

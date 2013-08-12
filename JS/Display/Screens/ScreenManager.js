@@ -43,6 +43,7 @@ ScreenManager.display = function(screenType, options) {
    }
 
    self.setScreen(screen);
+   Resizer.addCallback(ButtonManager.resize);
    Resizer.resize();
 };
 

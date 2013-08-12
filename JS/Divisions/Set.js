@@ -8,6 +8,6 @@ var Set = new Class({
       this.targetData = Utils.returnMember(options, 'targetData', null);
 
       // an array of RecordField 
-      this.lastData = Utils.returnMember(options, 'lastData', null);
+      this.recordFields = Utils.returnMember(options, 'fields', null);
    }
 });
