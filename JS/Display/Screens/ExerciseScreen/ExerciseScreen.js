@@ -43,8 +43,13 @@ var ExerciseScreen = new Class({
       });
 
       this.setRecords = new SetRecords({exercise: this.exercise});
+      this.dataEntryContainer = new Panel({'class': 'dataEntryContainer'});
+      DataEntryManager.setContainer(this.dataEntryContainer);
+      // call like this when switching record
+      //DataEntryManager.showFor(this.labelTitle, DATAENTRYTYPE.PLATE);
 
       $(this).grab($(this.labelTitle));
       $(this).grab($(this.setRecords));
+      $(this).grab($(this.dataEntryContainer));
    }
 });

@@ -19,6 +19,8 @@
    .dropDownMenu_inner, .dropDownMenu_inner_disabled,
    .dropDown_innerArrow,
    .dropDown_innerText,
+   .dataEntryContainer,
+   .dataEntry,
    .borderedPanel,
       .setRecords_currentBox, .setRecords_previousBox,
       .dropDownMenu_folded,
@@ -159,6 +161,13 @@
    margin: 1.5% 3%;
    background-color: #EEE;
    padding: 1%;
+}
+
+.dataEntryContainer {
+   height: 40%;
+   width: 94%;
+   margin: 4.5% 1.5% 3% 3%;
+   background-color: #EEE;
 }
 
 .setRecords_recordContainer {
