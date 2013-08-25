@@ -46,16 +46,5 @@ var ExerciseScreen = new Class({
 
       $(this).grab($(this.labelTitle));
       $(this).grab($(this.setRecords));
-
-      // TESTING
-      this.button = new Button({onClick: function(){console.log('hi');}});
-      this.button2 = new Button({text: 'Shit yooo'});
-      this.button3 = new Button({text: 'ya'});
-
-      $(this).grab($(this.button));
-      $(this).grab($(this.button2));
-      $(this).grab($(this.button3));
-
-      ButtonManager.addWidthGroup([this.button, this.button2]);
    }
 });
