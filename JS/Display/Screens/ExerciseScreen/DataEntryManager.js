@@ -39,6 +39,11 @@ DataEntryManager.showFor = function(monitorLabel, dataEntryType) {
 
 DataEntryManager.setContainer = function(container) {
    var self = DataEntryManager.getSingleton();
+   // It looks like calling this method multiple times with different
+   // containers is okay. The browser should automatically remove the element
+   // from its old container then add it to the new container.
+   // Or so says this post from npup on stackoverflow, haha
+   // http://stackoverflow.com/a/2453434/1433127
    $(container).grab($(self.plateEntry));
    $(container).grab($(self.digitEntry));
    $(container).grab($(self.durationEntry));
